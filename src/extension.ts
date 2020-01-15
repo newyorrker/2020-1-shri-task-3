@@ -15,7 +15,7 @@ import {
 const serverBundleRelativePath = join('out', 'server.js');
 const previewPath: string = resolve( __dirname, '../preview/index.html');
 const previewHtml: string = readFileSync(previewPath).toString();
-const template = bemhtml.compile()
+const template = bemhtml.compile();
 
 let client: LanguageClient;
 const PANELS: Record<string, vscode.WebviewPanel> = {};
@@ -51,10 +51,10 @@ const getPreviewKey = (doc: vscode.TextDocument): string => doc.uri.path;
 
 const getMediaPath = (context: vscode.ExtensionContext) => vscode.Uri
     .file(context.extensionPath)
-    .with({ scheme: "resource"})
+    .with({ scheme: "vscode-resource"})
     .toString() + '/';
 
-const initPreviewPanel = (document: vscode.TextDocument) => {
+const initPreviewPanel = (document: vscode.TextDocument, context: vscode.ExtensionContext) => {
     const key = getPreviewKey(document);
     const fileName = basename(document.fileName);
 
@@ -63,6 +63,7 @@ const initPreviewPanel = (document: vscode.TextDocument) => {
         `Preview: ${fileName}`,
         vscode.ViewColumn.Beside,
         {
+            localResourceRoots: [vscode.Uri.file(context.extensionPath + '/preview')],
             enableScripts: true
         }
     );
@@ -72,7 +73,7 @@ const initPreviewPanel = (document: vscode.TextDocument) => {
     const e = panel.onDidDispose(() => 
     {
         delete PANELS[key];
-        e.dispose()
+        e.dispose();
     });
 
     return panel;
@@ -86,7 +87,6 @@ const updateContent = (doc: vscode.TextDocument, context: vscode.ExtensionContex
             const json = doc.getText();
             const data = JSON.parse(json);
             const html = template.apply(data);
-
 
             panel.webview.html = previewHtml 
                 .replace(/{{\s+(\w+)\s+}}/g, (str, key) => {
@@ -112,9 +112,11 @@ const openPreview = (context: vscode.ExtensionContext) => {
 
         const panel = PANELS[key];
 
-        if (panel) panel.reveal();
+        if (panel) {
+            panel.reveal();
+        }
         else {
-            const panel = initPreviewPanel(document);
+            const panel = initPreviewPanel(document, context);
             updateContent(document, context);
             context.subscriptions.push(panel);
         }

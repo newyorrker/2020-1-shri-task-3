@@ -37,12 +37,15 @@ export function makeLint<TProblemKey>(
 
     function parseJson(json: string):JsonAST  {return jsonToAst(json); }
 
-    const errors: LinterProblem<TProblemKey>[] = [];
+    let errors: LinterProblem<TProblemKey>[] = [];
     const ast: JsonAST = parseJson(json);
 
     if (ast) {
         walk(ast, 
-            (property: jsonToAst.AstProperty) => errors.concat(...validateProperty(property)), 
+            (property: jsonToAst.AstProperty) => {
+                errors = errors.concat(...validateProperty(property));
+                return errors;
+            }, 
             (obj: jsonToAst.AstObject) => errors.concat(...validateObject(obj)));
     }
 

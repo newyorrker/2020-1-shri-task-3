@@ -4,6 +4,7 @@ import {
     TextDocuments,
     InitializeParams,
     TextDocument,
+    TextDocumentSyncKind,
     Diagnostic,
     DiagnosticSeverity,
     DidChangeConfigurationParams
@@ -19,11 +20,12 @@ import { makeLint, LinterProblem } from './linter';
 let conn = createConnection(ProposedFeatures.all);
 let docs = new TextDocuments();
 let conf: ExampleConfiguration | undefined = undefined;
+let sync: TextDocumentSyncKind = TextDocumentSyncKind.Full;
 
 conn.onInitialize((params: InitializeParams) => {
     return {
         capabilities: {
-            textDocumentSync: 'always'
+            textDocumentSync: sync
         }
     };
 });
@@ -63,7 +65,7 @@ function GetMessage(key: RuleKeys): string {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     const source = basename(textDocument.uri);
-    const json = textDocument.uri;
+    const json = textDocument.getText();
 
     const validateObject = (
         obj: jsonToAst.AstObject
