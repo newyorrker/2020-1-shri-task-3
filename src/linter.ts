@@ -3,6 +3,7 @@ import * as jsonToAst from "json-to-ast";
 export type JsonAST = jsonToAst.AstJsonEntity | undefined;
 
 export interface LinterProblem<TKey> {
+    code: TKey;
     key: TKey;
     loc: jsonToAst.AstLocation;
 }

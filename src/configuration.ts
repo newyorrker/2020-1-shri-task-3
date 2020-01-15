@@ -1,6 +1,12 @@
 export enum RuleKeys {
-    UppercaseNamesIsForbidden = 'uppercaseNamesIsForbidden',
-    BlockNameIsRequired = 'blockNameIsRequired',
+    InvalidButtonSize = 'WARNING.INVALID_BUTTON_SIZE',
+    InvalidButtonPosition = 'WARNING.INVALID_BUTTON_POSITION',
+    InvalidPlaceHolderSize = 'WARNING.INVALID_PLACEHOLDER_SIZE',
+    TextShouldBeEqual = 'WARNING.TEXT_SIZES_SHOULD_BE_EQUAL',
+    TextSeveralH1 = 'TEXT.SEVERAL_H1',
+    InvalidH2Position = 'TEXT.INVALID_H2_POSITION',
+    InvalidH3Position = 'TEXT.INVALID_H3_POSITION',
+    ToMuchMarketingBlocks = 'GRID.TOO_MUCH_MARKETING_BLOCKS'
 }
 
 export enum Severity {
@@ -12,8 +18,14 @@ export enum Severity {
 }
 
 export interface SeverityConfiguration {
-    [RuleKeys.BlockNameIsRequired]: Severity;
-    [RuleKeys.UppercaseNamesIsForbidden]: Severity;
+    [RuleKeys.InvalidButtonSize]: Severity;
+    [RuleKeys.InvalidButtonPosition]: Severity;
+    [RuleKeys.InvalidPlaceHolderSize]: Severity;
+    [RuleKeys.TextShouldBeEqual]: Severity;
+    [RuleKeys.TextSeveralH1]: Severity;
+    [RuleKeys.InvalidH2Position]: Severity;
+    [RuleKeys.InvalidH3Position]: Severity;
+    [RuleKeys.ToMuchMarketingBlocks]: Severity;
 }
 
 export interface ExampleConfiguration {
