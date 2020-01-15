@@ -46,7 +46,10 @@ export function makeLint<TProblemKey>(
                 errors = errors.concat(...validateProperty(property));
                 return errors;
             }, 
-            (obj: jsonToAst.AstObject) => errors.concat(...validateObject(obj)));
+            (obj: jsonToAst.AstObject) => {
+                errors = errors.concat(...validateObject(obj));
+                return errors;
+            });
     }
 
     return errors;
